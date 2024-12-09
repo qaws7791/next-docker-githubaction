@@ -70,6 +70,7 @@ jobs:
               echo "Nginx not found, installing Nginx..."
               sudo apt-get update
               sudo apt-get install nginx -y
+              sudo systemctl stop nginx
               sudo ufw allow 'Nginx Full'
               sudo ufw allow 'OpenSSH'
               sudo ufw enable
@@ -89,7 +90,7 @@ jobs:
             EOL
               sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
               sudo systemctl enable nginx
-              sudo systemctl start nginx
+              sudo systemctl restart nginx
             fi
             sudo docker pull ${{ vars.DOCKERHUB_USERNAME }}/next-docker-githubaction:latest
             sudo docker stop next-docker-githubaction || true
