@@ -70,7 +70,7 @@ jobs:
               echo "Nginx not found, installing Nginx..."
               sudo apt-get update
               sudo apt-get install nginx -y
-              sudo ufw allow 'Nginx HTTP'
+              sudo ufw allow 'Nginx Full'
               sudo ufw enable
 
               sudo cat > /etc/nginx/sites-available/default <<EOL
