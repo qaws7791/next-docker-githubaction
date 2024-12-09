@@ -71,6 +71,7 @@ jobs:
               sudo apt-get update
               sudo apt-get install nginx -y
               sudo ufw allow 'Nginx Full'
+              sudo ufw allow 'OpenSSH'
               sudo ufw enable
             sudo bash -c "cat > /etc/nginx/sites-available/default" <<EOL
             server {
