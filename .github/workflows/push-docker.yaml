@@ -73,7 +73,7 @@ jobs:
               sudo ufw allow 'Nginx Full'
               sudo ufw enable
 
-              sudo bash -c 'cat > /etc/nginx/sites-available/default <<EOF
+              sudo bash -c 'cat > /etc/nginx/sites-available/default <<EOL
               server {
                 listen 80;
                 server_name _;
@@ -86,7 +86,7 @@ jobs:
                   proxy_cache_bypass \$http_upgrade;
                 }
               }
-              EOF'
+              EOL'
               sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
               sudo systemctl enable nginx
               sudo systemctl start nginx
