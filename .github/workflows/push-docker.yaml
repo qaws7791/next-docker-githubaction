@@ -65,7 +65,32 @@ jobs:
               sudo systemctl enable docker
               sudo systemctl start docker
             fi
+            if ! command -v nginx &> /dev/null;
+            then
+              echo "Nginx not found, installing Nginx..."
+              sudo apt-get update
+              sudo apt-get install nginx -y
+              sudo ufw allow 'Nginx HTTP'
+              sudo ufw enable
+
+              sudo cat > /etc/nginx/sites-available/default <<EOL
+              server {
+                listen 80;
+                server_name _;
+                location / {
+                  proxy_pass http://localhost:3000;
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade \$http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_set_header Host \$host;
+                  proxy_cache_bypass \$http_upgrade;
+                }
+              }
+              sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+              sudo systemctl enable nginx
+              sudo systemctl start nginx
+            fi
             sudo docker pull ${{ vars.DOCKERHUB_USERNAME }}/next-docker-githubaction:latest
             sudo docker stop next-docker-githubaction || true
             sudo docker rm next-docker-githubaction || true
-            sudo docker run -d -p 80:3000 --name next-docker-githubaction ${{ vars.DOCKERHUB_USERNAME }}/next-docker-githubaction:latest
+            sudo docker run -d -p 3000:3000 --name next-docker-githubaction ${{ vars.DOCKERHUB_USERNAME }}/next-docker-githubaction:latest
